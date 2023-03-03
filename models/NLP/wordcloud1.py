@@ -10,6 +10,6 @@ def generate_wordcloud(string_list):
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
     #convert to png
-    plt.savefig('static\images\wordcloud.png')
+    plt.savefig('static/images/wordcloud.png')
 
     

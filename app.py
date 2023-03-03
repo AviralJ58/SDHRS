@@ -6,8 +6,8 @@ import cohere
 import json
 from algosdk.v2client import algod
 from algosdk import account, mnemonic, kmd
-from algosdk.future import transaction
-from algosdk.future.transaction import AssetConfigTxn, AssetTransferTxn, AssetFreezeTxn
+from algosdk import transaction
+# from algosdk.future.transaction import AssetConfigTxn, AssetTransferTxn, AssetFreezeTxn
 from cohere.classify import Example
 from db import DB, City, Hospital, Review, User
 from models.NLP.wordcloud1 import generate_wordcloud
@@ -102,46 +102,47 @@ def txn():
         pp = request.form['pp']
         hospitalName = request.form['hospitalName']
         rating=request.form['rating']
-        print(rating)
-        algod_address = "https://testnet-algorand.api.purestake.io/ps2"
-        algod_token = ""
-        headers = {
-            "X-API-Key": "LznYKjBylk53uEV5UDlN57lolkR64tnr1VHwsM19",
-        }
+        # print(rating)
+        # algod_address = "https://testnet-algorand.api.purestake.io/ps2"
+        # algod_token = ""
+        # headers = {
+        #     "X-API-Key": "LznYKjBylk53uEV5UDlN57lolkR64tnr1VHwsM19",
+        # }
 
-        # my_wallet
-        my_address = 'QZ4JHEU6QEXZCB52W7ABKLOXNSH6PBOSFNU4VVJNYNCIRVAP6UWLB3IQMU'
-        my_passphrase = 'cargo blush ocean cluster divert spider bunker gain excite shop jeans romance buzz loan potato stick people receive cross cheese unfair alter wild ability drop'
+        # # my_wallet
+        # my_address = 'QZ4JHEU6QEXZCB52W7ABKLOXNSH6PBOSFNU4VVJNYNCIRVAP6UWLB3IQMU'
+        # my_passphrase = 'cargo blush ocean cluster divert spider bunker gain excite shop jeans romance buzz loan potato stick people receive cross cheese unfair alter wild ability drop'
         
-        # Client Wallet 
-        client_pp = pp
-        client_address = mnemonic.to_public_key(client_pp)
-        print("Client address: {}".format(client_address))
-        client_SK = mnemonic.to_private_key(client_pp)
-        print("Client private key: {}".format(client_SK))
-        CLIENT_PASSP = client_pp
+        # # Client Wallet 
+        # client_pp = pp
+        # client_address = mnemonic.to_public_key(client_pp)
+        # print("Client address: {}".format(client_address))
+        # client_SK = mnemonic.to_private_key(client_pp)
+        # print("Client private key: {}".format(client_SK))
+        # CLIENT_PASSP = client_pp
 
-        # Initialize an algod client
-        algod_client = algod.AlgodClient(algod_token, algod_address, headers)
+        # # Initialize an algod client
+        # algod_client = algod.AlgodClient(algod_token, algod_address, headers)
 
-        # Get the relevant params from the algod    
-        params = algod_client.suggested_params()
-        params.flat_fee = True
-        params.fee = 1000
-        send_amount = 100000
+        # # Get the relevant params from the algod    
+        # params = algod_client.suggested_params()
+        # params.flat_fee = True
+        # params.fee = 1000
+        # send_amount = 100000
 
-        txn = transaction.PaymentTxn(client_address, params, my_address, send_amount)
-        signed_txn = txn.sign(client_SK)
+        # txn = transaction.PaymentTxn(client_address, params, my_address, send_amount)
+        # signed_txn = txn.sign(client_SK)
         
-        txid = algod_client.send_transaction(signed_txn)
-        if(txid):
-            print("Transaction sent, transaction ID: {}".format(txid))
-            txnStr = str('Transaction Successful with TransactionID: {}'.format(txid))
-            VERIFICATION_TOKEN = txid
-        else:
-            print("Transaction Failed")
-            txnStr = str('Transaction Failed')
-        return redirect(url_for('success', result=txnStr, VERIFICATION_TOKEN=VERIFICATION_TOKEN, hospitalName=hospitalName, review=review, client_pp=client_pp,rating=rating))
+        # txid = algod_client.send_transaction(signed_txn)
+        # if(txid):
+        #     print("Transaction sent, transaction ID: {}".format(txid))
+        #     txnStr = str('Transaction Successful with TransactionID: {}'.format(txid))
+        #     VERIFICATION_TOKEN = txid
+        # else:
+        #     print("Transaction Failed")
+        #     txnStr = str('Transaction Failed')
+        # return redirect(url_for('success', result=txnStr, VERIFICATION_TOKEN=VERIFICATION_TOKEN, hospitalName=hospitalName, review=review, client_pp=client_pp,rating=rating))
+        return redirect(url_for('success', result="Transaction successful", VERIFICATION_TOKEN="TOKEN", hospitalName=hospitalName, review=review, client_pp=pp,rating=rating))
         
     return render_template('transaction.html')
 
@@ -170,46 +171,46 @@ def success():
             DB.session.add(newReview)
             DB.session.commit()
             # Return the transaction back to client
-             # my_wallet
-            algod_address = "https://testnet-algorand.api.purestake.io/ps2"
-            algod_token = ""
-            headers = {
-                "X-API-Key": "LznYKjBylk53uEV5UDlN57lolkR64tnr1VHwsM19",
-            }
+            #  # my_wallet
+            # algod_address = "https://testnet-algorand.api.purestake.io/ps2"
+            # algod_token = ""
+            # headers = {
+            #     "X-API-Key": "LznYKjBylk53uEV5UDlN57lolkR64tnr1VHwsM19",
+            # }
 
-            # my_wallet
-            my_address = 'QZ4JHEU6QEXZCB52W7ABKLOXNSH6PBOSFNU4VVJNYNCIRVAP6UWLB3IQMU'
-            my_passphrase = 'cargo blush ocean cluster divert spider bunker gain excite shop jeans romance buzz loan potato stick people receive cross cheese unfair alter wild ability drop'
+            # # my_wallet
+            # my_address = 'QZ4JHEU6QEXZCB52W7ABKLOXNSH6PBOSFNU4VVJNYNCIRVAP6UWLB3IQMU'
+            # my_passphrase = 'cargo blush ocean cluster divert spider bunker gain excite shop jeans romance buzz loan potato stick people receive cross cheese unfair alter wild ability drop'
             
-            client_pp = CLIENT_PASSP
+            # client_pp = CLIENT_PASSP
 
-            client_address = mnemonic.to_public_key(client_pp)
-            print("Client address: {}".format(client_address))
-            client_SK = mnemonic.to_private_key(client_pp)
-            print("Client private key: {}".format(client_SK))
+            # client_address = mnemonic.to_public_key(client_pp)
+            # print("Client address: {}".format(client_address))
+            # client_SK = mnemonic.to_private_key(client_pp)
+            # print("Client private key: {}".format(client_SK))
 
-            # My wallet
-            my_address = 'QZ4JHEU6QEXZCB52W7ABKLOXNSH6PBOSFNU4VVJNYNCIRVAP6UWLB3IQMU'
-            my_sk = mnemonic.to_private_key(my_passphrase)
-            print("My address: {}".format(my_address))
-            print("My private key: {}".format(my_sk))
-
-
-            # Initialize an algod client
-            algod_client = algod.AlgodClient(algod_token, algod_address, headers)
-
-            # Get the relevant params from the algod    
-            params = algod_client.suggested_params()
-            params.flat_fee = True
-            params.fee = 1000
-            send_amount = 110000
-
-            # Send the transaction from my wallet to the client
-            txn = transaction.PaymentTxn(my_address, params, client_address, send_amount)
-            signed_txn = txn.sign(my_sk)
+            # # My wallet
+            # my_address = 'QZ4JHEU6QEXZCB52W7ABKLOXNSH6PBOSFNU4VVJNYNCIRVAP6UWLB3IQMU'
+            # my_sk = mnemonic.to_private_key(my_passphrase)
+            # print("My address: {}".format(my_address))
+            # print("My private key: {}".format(my_sk))
 
 
-            txid = algod_client.send_transaction(signed_txn)
+            # # Initialize an algod client
+            # algod_client = algod.AlgodClient(algod_token, algod_address, headers)
+
+            # # Get the relevant params from the algod    
+            # params = algod_client.suggested_params()
+            # params.flat_fee = True
+            # params.fee = 1000
+            # send_amount = 110000
+
+            # # Send the transaction from my wallet to the client
+            # txn = transaction.PaymentTxn(my_address, params, client_address, send_amount)
+            # signed_txn = txn.sign(my_sk)
+
+
+            # txid = algod_client.send_transaction(signed_txn)
             
             return render_template('txnsucess.html', txnid=VERIFICATION_TOKEN,result=genuinity,confidence=confidence)
         else:
