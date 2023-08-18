@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 app=Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///hospitalReview.db'
+app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///hospitalReview2.db'
 #initil=alize database
 DB=SQLAlchemy(app)
 
