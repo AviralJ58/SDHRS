@@ -20,7 +20,6 @@ app=Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///hospitalReview.db'
 DB.init_app(app)
-
 # SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 VERIFICATION_TOKEN = ''
@@ -165,6 +164,9 @@ def txn():
 #Successful transaction page
 @app.route('/success', methods=['GET', 'POST'])
 def success():
+    
+    conn = sqlite3.connect('hospitalReview.db')
+    c = conn.cursor()
     VERIFICATION_TOKEN = request.args.get('VERIFICATION_TOKEN')
     hospitalName = request.args.get('hospitalName')
     CLIENT_PASSP = request.args.get('client_pp')
@@ -183,10 +185,13 @@ def success():
             #write the review to the database if it is genuine
             if genuinity=='genuine':
                 #get id from hospital name
-                hospital=Hospital.query.filter_by(name=hospitalName).first()
-                id=hospital.id
-                newReview=Review(name='Anonymous',review=review,hospital_id=id,date_created='05/10/22',confidence=confidence,rating=rating)
-                DB.session.add(newReview)
+                # hospital=Hospital.query.filter_by(name=hospitalName).first()
+                hospital=c.execute('SELECT * FROM hospital WHERE name=?',(hospitalName,)).fetchone()
+                id=hospital[0]
+                #add review to database
+                numReview=c.execute('INSERT INTO review (name,review,hospital_id,date_created,confidence,rating) VALUES (?,?,?,?,?,?)',(CLIENT_PASSP,review,id,'05/10/22',confidence,rating))
+                # newReview=Review(name='Anonymous',review=review,hospital_id=id,date_created='05/10/22',confidence=confidence,rating=rating)
+                # DB.session.add(newReview)
                 DB.session.commit()
                 # Return the transaction back to client
                  # my_wallet
